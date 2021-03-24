@@ -71,13 +71,12 @@ async def eight(ctx, *, arg):
 @eight.error
 async def on_command_error(ctx, err):
     if isinstance(err, errors.MissingRequiredArgument):
-        await ctx.send("You do not have the right syntax.")
+        await ctx.send("You do not have the right syntax. try `.eight <question>`")
 
 
 @client.command(aliases = ['coinflip', 'ht', 'hort'])
 async def flip(ctx):
     state = random.randint(1,2)
-
     embed = discord.Embed(
         title = "Flipping coin..",
         color = discord.Colour.purple(),
@@ -87,5 +86,27 @@ async def flip(ctx):
     embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
     await ctx.send(embed = embed)
 
+@client.command(aliases = ['dice', 'd'])
+async def roll(ctx, *,  sides):
+    num = random.randint(1, int(sides))
+    embed = discord.Embed(
+        title = f"Rolling a {sides} sided die",
+        color = discord.Colour.purple(),
+    )
+    embed.add_field(name = "The Die has landed on", value = f"`{num}`")
+    embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
+    await ctx.send(embed = embed)
+@roll.error
+async def roll_errorr(ctx, err):    
+    if isinstance(err, errors.CommandInvokeError): 
+        embed = discord.Embed(
+            title = "Invalid syntax. \n try  `.roll <number of sides>`"
+        )
+        await ctx.send(embed = embed)
+    if isinstance(err, errors.MissingRequiredArgument):
+        embed = discord.Embed(
+            title = "Missing arguments. Did you forget a number? \n try  `.roll <number of sides>`"
+        )
+        await ctx.send(embed = embed)
 
 client.run(DISCORD_TOKEN)

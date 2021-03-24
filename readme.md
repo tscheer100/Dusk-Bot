@@ -6,3 +6,4 @@ A general purpose custom Discord bot that adds useful features as well as fun li
 - familiarized myself with `.gitignore` as not to leak data to the public.
 - learned about `.env` and how it can be used to seperate data from the rest of the code.
 - strengthened knowledge on Discord's API with `discord.py`
+-dipped my toes in the difference between handling discord specific errors and python errors. the discord specific errors can be found [here](https://discordpy.readthedocs.io/en/latest/api.html#discord.DiscordException) 
