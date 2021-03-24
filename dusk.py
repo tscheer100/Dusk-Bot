@@ -47,17 +47,31 @@ async def help(ctx):
     embed.add_field(name = 'Dusk Help', value = "Type `.d help` to bring up this menu, but you already knew that.", inline = False)
     embed.add_field(name = 'Magic 8-Ball', value = "Type `.d eight <question>` to summon the all powerful 8-ball!", inline = False)
     embed.add_field(name = "Coin Flip", value = "Flip a coin with `.d flip`")
-    embed.add_field(name = 'Dice', value = 'roll a virtually infinite sided dice. `.dice <number of sides>`', inline = False)
+    embed.add_field(name = 'Dice', value = "roll a virtually infinite sided dice. `.dice <number of sides>`", inline = False)
+    embed.add_field(name = 'WhoIs', value = "Learn the details of a member with `.whois @user`", inline = False)
     await ctx.send(embed = embed)
 
-@client.command()
+@client.command(aliases = ['who', 'whodat'])
 async def whois(ctx, member : discord.Member):
-    embed = discord.Embed(title = member.name, color = discord.Colour.purple() )
-    embed.add_field(name = "ID", value = member.id, inline = True)
+    embed = discord.Embed(
+        title = member.name, 
+        color = discord.Colour.purple() 
+    )
+    embed.add_field(name = 'Nickname', value = member.nick, inline = False)
+    embed.add_field(name = 'ID', value = member.id)
+    embed.add_field(name = 'Joined at', value = member.joined_at)
+    embed.add_field(name = 'Needs to verify', value = member.pending)
     embed.set_thumbnail(url = member.avatar_url)
     embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
     await ctx.send(embed = embed)
-
+@whois.error
+async def whois_error(ctx, err):
+    if isinstance(err, errors.MissingRequiredArgument):
+        embed = discord.Embed(
+            color = discord.Colour.dark_purple(),
+            title = "Missing argument. Did you forget to mention a user? \n Try `.whois @user`"
+        )
+        await ctx.send(embed = embed)
 
 @client.command(aliases = ['8ball', '8', '8 ball', 'eight ball', '8-ball', 'eight-ball'])
 async def eight(ctx, *, arg):
