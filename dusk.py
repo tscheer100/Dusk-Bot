@@ -47,6 +47,7 @@ async def help(ctx):
     embed.add_field(name = 'Dusk Help', value = "Type `.d help` to bring up this menu, but you already knew that.", inline = False)
     embed.add_field(name = 'Magic 8-Ball', value = "Type `.d eight <question>` to summon the all powerful 8-ball!", inline = False)
     embed.add_field(name = "Coin Flip", value = "Flip a coin with `.d flip`")
+    embed.add_field(name = 'Dice', value = 'roll a virtually infinite sided dice. `.dice <number of sides>`', inline = False)
     await ctx.send(embed = embed)
 
 @client.command()
@@ -56,6 +57,7 @@ async def whois(ctx, member : discord.Member):
     embed.set_thumbnail(url = member.avatar_url)
     embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
     await ctx.send(embed = embed)
+
 
 @client.command(aliases = ['8ball', '8', '8 ball', 'eight ball', '8-ball', 'eight-ball'])
 async def eight(ctx, *, arg):
@@ -69,9 +71,13 @@ async def eight(ctx, *, arg):
     embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
     await ctx.send(embed = embed)
 @eight.error
-async def on_command_error(ctx, err):
+async def eight_error(ctx, err):
     if isinstance(err, errors.MissingRequiredArgument):
-        await ctx.send("You do not have the right syntax. try `.eight <question>`")
+        embed = discord.Embed(
+            title = "Missing arguments, did you forget your question? \n Try `.eight <question>`",
+            color = discord.Colour.dark_purple()
+        )
+        await ctx.send(embed = embed)
 
 
 @client.command(aliases = ['coinflip', 'ht', 'hort'])
@@ -100,12 +106,14 @@ async def roll(ctx, *,  sides):
 async def roll_errorr(ctx, err):    
     if isinstance(err, errors.CommandInvokeError): 
         embed = discord.Embed(
-            title = "Invalid syntax. \n try  `.roll <number of sides>`"
+            title = "Invalid syntax. \n Try  `.roll <number of sides>`",
+            color = discord.Colour.dark_purple()
         )
         await ctx.send(embed = embed)
     if isinstance(err, errors.MissingRequiredArgument):
         embed = discord.Embed(
-            title = "Missing arguments. Did you forget a number? \n try  `.roll <number of sides>`"
+            title = "Missing arguments. Did you forget a number? \n Try  `.roll <number of sides>`",
+            color = discord.Colour.dark_purple()
         )
         await ctx.send(embed = embed)
 
