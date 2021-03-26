@@ -42,13 +42,30 @@ async def status(ctx):
 
 @client.command()
 async def help(ctx):
-    embed = discord.Embed(title = "Help menu", color = discord.Colour.purple())
+    embed = discord.Embed(
+        title = "Help menu",
+        color = discord.Colour.purple()
+    )
     embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/767175117901266974/767250128045473802/duskiconmixedreborn.gif")
-    embed.add_field(name = 'Dusk Help', value = "Type `.d help` to bring up this menu, but you already knew that.", inline = False)
-    embed.add_field(name = 'Magic 8-Ball', value = "Type `.d eight <question>` to summon the all powerful 8-ball!", inline = False)
-    embed.add_field(name = "Coin Flip", value = "Flip a coin with `.d flip`")
-    embed.add_field(name = 'Dice', value = "roll a virtually infinite sided dice. `.dice <number of sides>`", inline = False)
+    embed.add_field(name = 'Dusk Help', value = "Type `.help` to bring up this menu, but you already knew that.", inline = False)
+    embed.add_field(name = 'Magic 8-Ball', value = "Type `.eight <question>` to summon the all powerful 8-ball!", inline = False)
+    embed.add_field(name = "Coin Flip", value = "Flip a coin with `.flip`", inline = False)
+    embed.add_field(name = 'Dice', value = "roll a virtually infinite sided dice. `.dice <number of sides>`")
     embed.add_field(name = 'WhoIs', value = "Learn the details of a member with `.whois @user`", inline = False)
+    embed.add_field(name = 'Github', value = "Check out the bot's code and more. `.github`", inline = False)
+    embed.add_field(name = 'Support the Dev for more free bots :grin:', value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
+    await ctx.send(embed = embed)
+
+@client.command(aliases = ['git', 'code'])
+async def github(ctx):
+    embed = discord.Embed(
+        title = "Check out the developer's code!",
+        color = discord.Colour.purple(),
+    )
+    embed.set_thumbnail(url = "https://www.sferalabs.cc/wp-content/uploads/github-logo-white.png")
+    embed.add_field(name = "Dusk Bot code", value = "https://github.com/tscheer100/Dusk-Bot", inline = False)
+    embed.add_field(name = "Developers Github", value = "https://github.com/tscheer100")
+    embed.add_field(name = "Support more free bots by paying for the developer's coffee :woozy_face::coffee:", value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
     await ctx.send(embed = embed)
 
 @client.command(aliases = ['who', 'whodat'])
@@ -62,7 +79,7 @@ async def whois(ctx, member : discord.Member):
     embed.add_field(name = 'Joined at', value = member.joined_at)
     embed.add_field(name = 'Needs to verify', value = member.pending)
     embed.set_thumbnail(url = member.avatar_url)
-    embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
+    embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.name}")
     await ctx.send(embed = embed)
 @whois.error
 async def whois_error(ctx, err):
