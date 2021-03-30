@@ -6,7 +6,8 @@ from discord.ext import commands
 from discord.ext.commands import errors
 import random
 
-os.chdir('./Dusk')
+# uncomment if running in VSCode and change to the appropriate directory.
+# os.chdir('./Dusk')
 load_dotenv('./.env')
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
