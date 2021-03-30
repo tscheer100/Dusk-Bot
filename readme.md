@@ -1,6 +1,11 @@
 # Dusk Bot
 A general purpose custom Discord bot that adds useful features as well as fun little tricks to keep members entertained.  
 
+# requirements:
+- [discord.py](https://github.com/Rapptz/discord.py)
+- A bot token. must authorize [here](https://discord.com/developers/applications)
+- [.env](https://pypi.org/project/python-dotenv/)
+
 ### What I've learned fomr this prroject:
 - Tenerary Operators and how to use them to circumnavigate Discord embed's lack of support for regular `if-else` statements.
 - familiarized myself with `.gitignore` as not to leak data to the public.
