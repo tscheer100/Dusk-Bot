@@ -19,14 +19,14 @@ class Valheim(commands.Cog):
 
     @commands.command()
     async def valheim(self, ctx, *, message = None):
-        await ctx.send("Check your DMs :)")
+        await ctx.send("Check your DMs {} :)".format(ctx.author.mention))
 
         embed = discord.Embed(
             title = "Vanilla Valheim info",
             description = "This is the information to log into our vanilla Valheim server"
         )
         embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/767175117901266974/767250128045473802/duskiconmixedreborn.gif")
-        embed.add_field(name = "Server name", value = "Mudspelheim")
+        embed.add_field(name = "Server name", value = "Muspelheim")
         embed.add_field(name = "Password", value = "valhalla")
         embed.add_field(name = "IP address", value = "52.149.14.67:4456")
         embed.add_field(name = "Looking for the modded seerver?", value = "Type `.modvalheim` for modded server info")
@@ -35,7 +35,7 @@ class Valheim(commands.Cog):
     
     @commands.command()
     async def modvalheim(self, ctx):
-        await ctx.send("check your DMs :)")
+        await ctx.send("Check your DMs {} :)".format(ctx.author.mention))
         embed = discord.Embed(
             title = "Valheim Modded Info",
             description = "This server is only accessable if you have the latest patch for the server"
