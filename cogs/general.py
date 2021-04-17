@@ -27,18 +27,9 @@ class General(commands.Cog):
     # Events
     @commands.Cog.listener()
     async def on_ready(self):
-        print("General Cog loaded")
+        print("General Cog loaded.")
 
     # Commands
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send("Pong!")
-
-    @commands.command()
-    async def status(self, ctx):
-        print("I am alive!")
-        await ctx.send("I am alive!")
-
     @commands.command()
     async def help(self, ctx):
         embed = discord.Embed(

@@ -31,4 +31,9 @@ for filename in os.listdir('./cogs'):
 async def on_ready():
     print("Dusk bot is running.")
 
+@client.command()
+async def status(self, ctx):
+    print("I am alive!")
+    await ctx.send("I am alive!")
+
 client.run(DISCORD_TOKEN)
