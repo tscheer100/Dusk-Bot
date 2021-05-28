@@ -53,6 +53,35 @@ class Economy(commands.Cog):
 
         await ctx.send(f"You withdrew {amount} coins!")
 
+
+    @commands.command(aliases = ["send"])
+    async def gift(self, ctx, member: discord.Member, amount = None):
+        await self.open_account(ctx.author)
+        await self.open_account(member)
+
+        if amount == None:
+            await ctx.send("Please enter the amount")
+            return
+
+        bal = await self.update_bank(ctx.author)
+
+        amount = int(amount)        
+        if amount > bal[0]:
+            await ctx.send("Insufficient amount")
+            return
+        if amount<0:
+            await ctx.send("amount must be positive!")
+            return
+        
+        await self.update_bank(ctx.author, -1*amount, "wallet")
+        await self.update_bank(member, amount, "wallet")
+
+        await ctx.send(f"You sent {amount} coins to {member}!")
+    @gift.error
+    async def gift_error(self, ctx, err):
+        if isinstance(err, errors.MemberNotFound):
+            await ctx.send("Member not found. Try `.gift @member <amount>`")
+
     @commands.command(aliases = ["dep"])
     async def deposit(self, ctx, amount = None):
         await self.open_account(ctx.author)
