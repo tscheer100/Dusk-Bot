@@ -186,16 +186,21 @@ class Economy(commands.Cog):
         await self.open_account(ctx.author)
         self.user = ctx.author
         users = await self.get_bank_data()
+        wallet_amt = users[str(self.user.id)]["wallet"]
+        bank_amt = users[str(self.user.id)]["bank"]
         earnings = random.randrange(100)
 
-        await ctx.send(f"Someone gave you {earnings} coins!")
-
-        users[str(self.user.id)]["wallet"] += earnings
+        if wallet_amt + bank_amt < 200:
+            await ctx.send(f"Someone gave you **{earnings}** coins!")
+            users[str(self.user.id)]["wallet"] += earnings
+        else:
+            await ctx.send("You can only beg if your net worth is below __**200 coins**__")
 
         with open("bank.json", "w") as f:
             json.dump(users, f)
 
         return self.user
+
 
 def setup(client):
     client.add_cog(Economy(client))
