@@ -104,6 +104,54 @@ class Economy(commands.Cog):
 
         await ctx.send(f"You deposited {amount} coins!")
 
+    @commands.command(aliases = ["slot"])
+    async def slots(self, ctx, amount = None):
+        await self.open_account(ctx.author)
+        if amount == None:
+            await ctx.send("Please enter the amount")
+            return
+
+        bal = await self.update_bank(ctx.author)
+
+        amount = int(amount)        
+        if amount > bal[0]:
+            await ctx.send("Insufficient amount")
+            return
+        if amount<0:
+            await ctx.send("amount must be positive!")
+            return
+        
+        final = []
+        choices = ["<:among_blue:848646255252471868>", "<:among_purple:848646255264399370>", "<:among_red:848646255248146523>"]
+        done = ""
+        for i in range(len(choices)):
+            # a = random.choice(["<:among_blue:848646255252471868>", "<:among_purple:848646255264399370>", "<among_red:848646255248146523>"])
+            final.append(random.choice(choices))
+
+        for k in range(len(final)):
+            done += final[k]
+            done += " "
+        
+        slot_embed = discord.Embed(
+            title = "You pull the lever...",
+            description = "You wait anxiously as the slots spin furiously...",
+            color = discord.Color.purple()
+        )
+        slot_embed.set_image(url = "https://i.gifer.com/8nNk.gif")
+        await ctx.send(embed = slot_embed)
+
+        results_embed = discord.Embed(
+            title = "The slots finally stop spinning...",
+            color = discord.Color.dark_purple()
+        )
+        if final[0] == final[1] or final[0] == final[2] or final[1] == final[2]:
+            await self.update_bank(ctx.author, 2*amount)
+            results_embed.add_field(name = done, value = f"Congratulations! You've won {2*amount} coins! :Fire16:")
+        else:
+            await self.update_bank(ctx.author, -1*amount)
+            results_embed.add_field(name= done, value = f" Oh no!You've lost {amount} coins.")
+        await ctx.send(embed = results_embed)
+
     async def open_account(self, user):
         users = await self.get_bank_data()
 
