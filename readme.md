@@ -7,6 +7,39 @@ A general purpose custom Discord bot that adds useful features as well as fun li
 - [.env](https://pypi.org/project/python-dotenv/)
 - Python 3.x
 
+## Setup
+To set up locally, first pull the repo
+```sh
+git clone https://github.com/tscheer100/Dusk-Bot.git
+```
+then create a `.env` file within the root folder of the repo.
+```sh
+touch .env
+```
+edit the `.env` file 
+```sh
+nano .env
+```
+once in the file, add your discord token with the following syntax
+```
+DISCORD_TOKEN="U2OTA3MTQ3ODk5Njkjkz.X2Yqtg.FSGfvEqZILo"
+```
+also, to make the economy work correctly, make a `bank.json` file.
+```sh
+touch bank.json
+```
+then `nano` into the file to edit it like before and add an empty curly brace backet.
+```json
+{
+
+}
+```
+run the bot using python
+```sh
+python3 dusk.py
+```
+
+
 ### What I've learned fomr this prroject:
 - Tenerary Operators and how to use them to circumnavigate Discord embed's lack of support for regular `if-else` statements.
 - Familiarized myself with `.gitignore` as not to leak data to the public.

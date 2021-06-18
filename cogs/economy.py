@@ -122,6 +122,15 @@ class Economy(commands.Cog):
             return
         
         final = []
+
+        # dusk emojis
+        # choices = ["<:among_yellow:855213922180005969>",
+        # "<:among_white:855213922062958593>",
+        # "<:among_red:855160363090706464>",
+        # "<:among_purple:855160523939381278>",
+        # "<:among_cyan:855213921899773984>",
+        # "<:among_blue:855160063495897130>"]
+        
         choices = ["<:among_blue:848646255252471868>",
         "<:among_purple:848646255264399370>",
         "<:among_red:848646255248146523>",
