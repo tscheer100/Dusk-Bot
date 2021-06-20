@@ -139,8 +139,10 @@ class Economy(commands.Cog):
         "<:among_purple:848646255264399370>",
         "<:among_red:848646255248146523>",
         "<:among_yellow:855192733555621938>",
-        "<:among_cyan:855194895333720115>",
-        "<:among_white:855196037647171595>"]
+        # "<:among_cyan:855194895333720115>", removed to make chances more fair
+        # "<:among_white:855196037647171595>"
+        ]
+        
         first = ""
         done = ""
         duplicate_check = set()
@@ -159,15 +161,35 @@ class Economy(commands.Cog):
             else:
                 duplicate_check.add(elem)
 
+        initial_embed = discord.Embed(
+            title = "The slots begin to whirl furiously...",
+            color = discord.Color.dark_purple()
+        )
+        initial = among_rand + " " + among_rand + " " + among_rand
+        initial_embed.add_field(name = initial, value = "you wait anxiously...")
+        msg = await ctx.send(embed = initial_embed)
+        
+        await asyncio.sleep(1)
+
         first_embed = discord.Embed(
             title = "The slots begin to whirl furiously...",
             color = discord.Color.dark_purple()
         )
-        first += among_rand + " " + among_rand + " " + among_rand
+        first += final[0] + " " + among_rand + " " + among_rand
         first_embed.add_field(name = first, value = "you wait anxiously...")
-        msg = await ctx.send(embed = first_embed)
+        await msg.edit(embed = first_embed)
 
-        await asyncio.sleep(2)
+        await asyncio.sleep(1)
+
+        second_embed = discord.Embed(
+            title = "The slots begin to whirl furiously...",
+            color = discord.Color.dark_purple()
+        )
+        second = final[0] + " " + final[1] + " " + among_rand
+        second_embed.add_field(name = second, value = "you wait anxiously...")
+        await msg.edit(embed = second_embed)
+
+        await asyncio.sleep(1)
 
         results_embed = discord.Embed(
             title = "The slots finally stop spinning...",
