@@ -47,3 +47,5 @@ python3 dusk.py
 - Strengthened knowledge on Discord's API with `discord.py`
 - Dipped my toes in the difference between handling discord specific errors and python errors. the discord specific errors can be found [here](https://discordpy.readthedocs.io/en/latest/api.html#discord.DiscordException) 
 - Dealt with SSH and raspberry pi. learned that pi zeros only support 2.4ghz band.
+- Learned about embed editing.
+- Got more experience integrating JSON into Python.
