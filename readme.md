@@ -49,3 +49,4 @@ python3 dusk.py
 - Dealt with SSH and raspberry pi. learned that pi zeros only support 2.4ghz band.
 - Learned about embed editing.
 - Got more experience integrating JSON into Python.
+- Gained more understanding as to when to use the `self` command to call other methods within a class.

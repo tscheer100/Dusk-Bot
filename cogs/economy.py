@@ -55,7 +55,7 @@ class Economy(commands.Cog):
         await ctx.send(f"You withdrew {amount} coins!")
 
 
-    @commands.command(aliases = ["send"])
+    @commands.command(aliases = ["send","give"])
     async def gift(self, ctx, member: discord.Member, amount = None):
         await self.open_account(ctx.author)
         await self.open_account(member)
@@ -260,5 +260,27 @@ class Economy(commands.Cog):
 
         return self.user
 
+    @commands.command(aliases = ["steal"])
+    async def rob(self, ctx, member: discord.Member):
+        await self.open_account(ctx.author)
+        await self.open_account(member)
+
+        bal = await self.update_bank(member)
+        earnings = random.randrange(1, int(bal[0]/4))
+        success = random.randrange(0,2)
+
+        if bal[0] < 100:
+            await ctx.send(f"It's not worth it, {member} only has {bal[0]} coins")
+            return
+        else:
+            if success == 1: 
+                await ctx.send(f"You stole {earnings} from {member} coins!")
+                await self.update_bank(ctx.author, earnings)
+                await self.update_bank(member, -1*earnings)
+            else:
+                await ctx.send(f"Oops! you got caught! You had to pay {member} {earnings} coins.")
+                await self.update_bank(ctx.author, -1*earnings)
+                await self.update_bank(member, earnings)
+            
 def setup(client):
     client.add_cog(Economy(client))
