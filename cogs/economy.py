@@ -15,7 +15,7 @@ class Economy(commands.Cog):
         print("Economy Cog loaded.")
 
     # Commands
-    @commands.command(aliases = ["bal"])
+    @commands.command(aliases = ["bal", "wallet", "money"])
     async def balance(self, ctx):
         await self.open_account(ctx.author)
         self.user = ctx.author
@@ -125,6 +125,8 @@ class Economy(commands.Cog):
         final = []
 
         # dusk emojis
+
+        # among_rand = "<a:among_rand:855159685538512937>"
         # choices = ["<:among_yellow:855213922180005969>",
         # "<:among_white:855213922062958593>",
         # "<:among_red:855160363090706464>",
@@ -260,7 +262,7 @@ class Economy(commands.Cog):
 
         return self.user
 
-    @commands.command(aliases = ["steal"])
+    @commands.command(aliases = ["steal", "mug"])
     async def rob(self, ctx, member: discord.Member):
         await self.open_account(ctx.author)
         await self.open_account(member)
