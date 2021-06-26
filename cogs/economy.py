@@ -283,6 +283,10 @@ class Economy(commands.Cog):
                 await ctx.send(f"Oops! you got caught! You had to pay {member} {earnings} coins.")
                 await self.update_bank(ctx.author, -1*earnings)
                 await self.update_bank(member, earnings)
+    @rob.error
+    async def rob_error(self, ctx, err):
+        if isinstance(err, errors.MemberNotFound):
+            await ctx.send("invalid syntax. type `.rob @user`")
             
 def setup(client):
     client.add_cog(Economy(client))
