@@ -16,21 +16,34 @@ class Economy(commands.Cog):
 
     # Commands
     @commands.command(aliases = ["bal", "wallet", "money"])
-    async def balance(self, ctx):
-        await self.open_account(ctx.author)
-        self.user = ctx.author
+    async def balance(self, ctx, member: discord.Member = None):
+        if not member:
+            await self.open_account(ctx.author)
+            self.user = ctx.author
+        else:
+            await self.open_account(member)
+            self.user = member
+
+        print(member)
+
         users = await self.get_bank_data()
         wallet_amt = users[str(self.user.id)]["wallet"]
         bank_amt = users[str(self.user.id)]["bank"]
 
         embed = discord.Embed(
-            title = f"{ctx.author.name}'s balance",
+            title = f"{member.display_name}'s balance",
             color = discord.Color.purple()
         )
         embed.add_field(name = "Wallet balance", value = wallet_amt)
         embed.add_field(name = "Bank balance", value = bank_amt)
         embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.name}")
         await ctx.send(embed = embed)
+    @balance.error
+    async def balance_error(self, ctx, err):
+        if isinstance(err, errors.MissingRequiredArgument):
+            return
+
+
 
     @commands.command()
     async def withdraw(self, ctx, amount = None):
@@ -140,7 +153,7 @@ class Economy(commands.Cog):
         choices = ["<:among_blue:848646255252471868>",
         "<:among_purple:848646255264399370>",
         "<:among_red:848646255248146523>",
-        "<:among_yellow:855192733555621938>",
+        # "<:among_yellow:855192733555621938>",
         # "<:among_cyan:855194895333720115>", removed to make chances more fair
         # "<:among_white:855196037647171595>"
         ]
