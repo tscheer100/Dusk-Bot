@@ -1,4 +1,5 @@
 import discord
+from discord import user
 from discord.ext import commands
 from discord.ext.commands import errors
 import json
@@ -24,14 +25,12 @@ class Economy(commands.Cog):
             await self.open_account(member)
             self.user = member
 
-        print(member)
-
         users = await self.get_bank_data()
         wallet_amt = users[str(self.user.id)]["wallet"]
         bank_amt = users[str(self.user.id)]["bank"]
 
         embed = discord.Embed(
-            title = f"{member.display_name}'s balance",
+            title = f"{self.user.display_name}'s balance",
             color = discord.Color.purple()
         )
         embed.add_field(name = "Wallet balance", value = wallet_amt)
@@ -42,8 +41,6 @@ class Economy(commands.Cog):
     async def balance_error(self, ctx, err):
         if isinstance(err, errors.MissingRequiredArgument):
             return
-
-
 
     @commands.command()
     async def withdraw(self, ctx, amount = None):
@@ -66,7 +63,6 @@ class Economy(commands.Cog):
         await self.update_bank(ctx.author, -1*amount, "bank")
 
         await ctx.send(f"You withdrew {amount} coins!")
-
 
     @commands.command(aliases = ["send","give"])
     async def gift(self, ctx, member: discord.Member, amount = None):
@@ -146,7 +142,7 @@ class Economy(commands.Cog):
         # "<:among_purple:855160523939381278>",
         # "<:among_cyan:855213921899773984>",
         # "<:among_blue:855160063495897130>"]
-        
+ 
 
         among_rand = "<a:among_rand:848648377922224229>"
 
@@ -225,7 +221,6 @@ class Economy(commands.Cog):
             results_embed.add_field(name= done, value = f" Oh no!You've lost {amount} coins.")
         await msg.edit(embed = results_embed)
 
-
     async def open_account(self, user):
         users = await self.get_bank_data()
 
@@ -281,21 +276,25 @@ class Economy(commands.Cog):
         await self.open_account(member)
 
         bal = await self.update_bank(member)
+        thief_bal = await self.update_bank(ctx.author)
         earnings = random.randrange(1, int(bal[0]/4))
         success = random.randrange(0,2)
 
-        if bal[0] < 100:
-            await ctx.send(f"It's not worth it, {member} only has {bal[0]} coins")
-            return
-        else:
-            if success == 1: 
-                await ctx.send(f"You stole {earnings} from {member} coins!")
-                await self.update_bank(ctx.author, earnings)
-                await self.update_bank(member, -1*earnings)
+        if thief_bal[0] >= (bal[0]/4):
+            if bal[0] < 100:
+                await ctx.send(f"It's not worth it, {member} only has {bal[0]} coins")
+                return
             else:
-                await ctx.send(f"Oops! you got caught! You had to pay {member} {earnings} coins.")
-                await self.update_bank(ctx.author, -1*earnings)
-                await self.update_bank(member, earnings)
+                if success == 1: 
+                    await ctx.send(f"You stole {earnings} from {member} coins!")
+                    await self.update_bank(ctx.author, earnings)
+                    await self.update_bank(member, -1*earnings)
+                else:
+                    await ctx.send(f"Oops! you got caught! You had to pay {member} {earnings} coins.")
+                    await self.update_bank(ctx.author, -1*earnings)
+                    await self.update_bank(member, earnings)
+        else:
+            await ctx.send("""If you get caught, you might not have enough to pay the fee.\nDon't rob from people unless you have at least a fourth of their wallet balance.""")
     @rob.error
     async def rob_error(self, ctx, err):
         if isinstance(err, errors.MemberNotFound):
