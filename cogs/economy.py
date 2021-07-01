@@ -299,6 +299,20 @@ class Economy(commands.Cog):
     async def rob_error(self, ctx, err):
         if isinstance(err, errors.MemberNotFound):
             await ctx.send("invalid syntax. type `.rob @user`")
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        ctx = message.channel
+
+        if message.author.id == 302050872383242240 and message.embeds:
+            if '<@' in message.embeds[0].description:
+                desc = message.embeds[0].description
+                start = desc.find('<@')
+                end = desc.find('>')
+                bumper = desc[start:end+1]
+                print(message.embeds[0].description)
+                print(bumper)
+                await ctx.send(bumper)
             
 def setup(client):
     client.add_cog(Economy(client))
