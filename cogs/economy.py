@@ -218,7 +218,7 @@ class Economy(commands.Cog):
             results_embed.add_field(name = done, value = f"Congratulations! You've won {2*amount} coins! :Fire16:")
         else:
             await self.update_bank(ctx.author, -1*amount)
-            results_embed.add_field(name= done, value = f" Oh no!You've lost {amount} coins.")
+            results_embed.add_field(name= done, value = f" Oh no! You've lost {amount} coins.")
         await msg.edit(embed = results_embed)
 
     async def open_account(self, user):
@@ -303,16 +303,17 @@ class Economy(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         ctx = message.channel
+        # men = message.author.mention
 
-        if message.author.id == 302050872383242240 and message.embeds:
-            if '<@' in message.embeds[0].description:
+        if message.author.id == 302050872383242240 and message.embeds:          
+            if '<@' in message.embeds[0].description and "done" in message.embeds[0].description:
                 desc = message.embeds[0].description
                 start = desc.find('<@')
                 end = desc.find('>')
-                bumper = desc[start:end+1]
-                print(message.embeds[0].description)
-                print(bumper)
-                await ctx.send(bumper)
+                bumper_id = desc[start+2:end]
+                bumper = self.client.get_user(int(bumper_id))
+                await self.update_bank(bumper, 500, "wallet")
+                await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
             
 def setup(client):
     client.add_cog(Economy(client))
