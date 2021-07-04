@@ -86,7 +86,7 @@ class Economy(commands.Cog):
         await self.update_bank(ctx.author, -1*amount, "wallet")
         await self.update_bank(member, amount, "wallet")
 
-        await ctx.send(f"You sent {amount} coins to {member}!")
+        await ctx.send(f"You sent {amount} coins to {member.display_name}!")
     @gift.error
     async def gift_error(self, ctx, err):
         if isinstance(err, errors.MemberNotFound):
@@ -143,9 +143,8 @@ class Economy(commands.Cog):
         # "<:among_cyan:855213921899773984>",
         # "<:among_blue:855160063495897130>"]
  
-
+        # test server emojis
         among_rand = "<a:among_rand:848648377922224229>"
-
         choices = ["<:among_blue:848646255252471868>",
         "<:among_purple:848646255264399370>",
         "<:among_red:848646255248146523>",
@@ -282,15 +281,15 @@ class Economy(commands.Cog):
 
         if thief_bal[0] >= (bal[0]/4):
             if bal[0] < 100:
-                await ctx.send(f"It's not worth it, {member} only has {bal[0]} coins")
+                await ctx.send(f"It's not worth it, {member.display_name} only has {bal[0]} coins")
                 return
             else:
                 if success == 1: 
-                    await ctx.send(f"You stole {earnings} from {member} coins!")
+                    await ctx.send(f"You stole {earnings} from {member.display_name}'s' wallet!")
                     await self.update_bank(ctx.author, earnings)
                     await self.update_bank(member, -1*earnings)
                 else:
-                    await ctx.send(f"Oops! you got caught! You had to pay {member} {earnings} coins.")
+                    await ctx.send(f"Oops! you got caught! You had to pay {member.display_name} {earnings} coins.")
                     await self.update_bank(ctx.author, -1*earnings)
                     await self.update_bank(member, earnings)
         else:
