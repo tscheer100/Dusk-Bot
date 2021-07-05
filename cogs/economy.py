@@ -45,13 +45,19 @@ class Economy(commands.Cog):
     @commands.command()
     async def withdraw(self, ctx, amount = None):
         await self.open_account(ctx.author)
+        self.user = ctx.author
+        users = await self.get_bank_data()
+
         if amount == None:
             await ctx.send("Please enter the amount")
             return
 
         bal = await self.update_bank(ctx.author)
-
-        amount = int(amount)        
+        bank_amt = users[str(self.user.id)]["bank"]
+ 
+        if amount == "all":
+            amount = bank_amt
+        amount = int(amount) 
         if amount > bal[1]:
             await ctx.send("Insufficient amount")
             return
@@ -95,12 +101,17 @@ class Economy(commands.Cog):
     @commands.command(aliases = ["dep"])
     async def deposit(self, ctx, amount = None):
         await self.open_account(ctx.author)
+        self.user = ctx.author
+        users = await self.get_bank_data()
+
+        wallet_amt = users[str(self.user.id)]["wallet"]
         if amount == None:
             await ctx.send("Please enter the amount")
             return
 
         bal = await self.update_bank(ctx.author)
-
+        if amount == "all":
+            amount = wallet_amt
         amount = int(amount)        
         if amount > bal[0]:
             await ctx.send("Insufficient amount")
