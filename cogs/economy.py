@@ -10,10 +10,59 @@ class Economy(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # load data 
+    async def get_bank_data(self):
+        with open("bank.json", "r") as f:
+            users = json.load(f)
+        return users
+
+    async def update_bank(self, user,change = 0, mode = "wallet"):
+        users = await self.get_bank_data()
+        users[str(user.id)][mode] += change
+
+        with open("bank.json", "w") as f:
+            json.dump(users, f)
+        bal = [users[str(user.id)]["wallet"], users[str(user.id)]["bank"]]
+        return bal
+
+    @commands.command()
+    async def beg(self, ctx):
+        await self.open_account(ctx.author)
+        self.user = ctx.author
+        users = await self.get_bank_data()
+        wallet_amt = users[str(self.user.id)]["wallet"]
+        bank_amt = users[str(self.user.id)]["bank"]
+        earnings = random.randrange(100)
+
+        if wallet_amt + bank_amt < 200:
+            await ctx.send(f"Someone gave you **{earnings}** coins!")
+            users[str(self.user.id)]["wallet"] += earnings
+        else:
+            await ctx.send("You can only beg if your net worth is below __**200 coins**__")
+
+        with open("bank.json", "w") as f:
+            json.dump(users, f)
+
+        return self.user
+
     # Events
     @commands.Cog.listener()
     async def on_ready(self):
         print("Economy Cog loaded.")
+    
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        ctx = message.channel
+
+        if message.author.id == 302050872383242240 and message.embeds:          
+            if '<@' in message.embeds[0].description and "done" in message.embeds[0].description:
+                desc = message.embeds[0].description
+                start = desc.find('<@')
+                end = desc.find('>')
+                bumper_id = desc[start+2:end]
+                bumper = self.client.get_user(int(bumper_id))
+                await self.update_bank(bumper, 500, "wallet")
+                await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
 
     # Commands
     @commands.command(aliases = ["bal", "wallet", "money"])
@@ -70,6 +119,33 @@ class Economy(commands.Cog):
 
         await ctx.send(f"You withdrew {amount} coins!")
 
+    @commands.command(aliases = ["dep"])
+    async def deposit(self, ctx, amount = None):
+        await self.open_account(ctx.author)
+        self.user = ctx.author
+        users = await self.get_bank_data()
+
+        wallet_amt = users[str(self.user.id)]["wallet"]
+        if amount == None:
+            await ctx.send("Please enter the amount")
+            return
+
+        bal = await self.update_bank(ctx.author)
+        if amount == "all":
+            amount = wallet_amt
+        amount = int(amount)        
+        if amount > bal[0]:
+            await ctx.send("Insufficient amount")
+            return
+        if amount<0:
+            await ctx.send("amount must be positive!")
+            return
+        
+        await self.update_bank(ctx.author, -1*amount)
+        await self.update_bank(ctx.author, amount, "bank")
+
+        await ctx.send(f"You deposited {amount} coins!")
+
     @commands.command(aliases = ["send","give"])
     async def gift(self, ctx, member: discord.Member, amount = None):
         await self.open_account(ctx.author)
@@ -97,33 +173,6 @@ class Economy(commands.Cog):
     async def gift_error(self, ctx, err):
         if isinstance(err, errors.MemberNotFound):
             await ctx.send("Member not found. Try `.gift @member <amount>`")
-
-    @commands.command(aliases = ["dep"])
-    async def deposit(self, ctx, amount = None):
-        await self.open_account(ctx.author)
-        self.user = ctx.author
-        users = await self.get_bank_data()
-
-        wallet_amt = users[str(self.user.id)]["wallet"]
-        if amount == None:
-            await ctx.send("Please enter the amount")
-            return
-
-        bal = await self.update_bank(ctx.author)
-        if amount == "all":
-            amount = wallet_amt
-        amount = int(amount)        
-        if amount > bal[0]:
-            await ctx.send("Insufficient amount")
-            return
-        if amount<0:
-            await ctx.send("amount must be positive!")
-            return
-        
-        await self.update_bank(ctx.author, -1*amount)
-        await self.update_bank(ctx.author, amount, "bank")
-
-        await ctx.send(f"You deposited {amount} coins!")
 
     @commands.command(aliases = ["slot"])
     async def slots(self, ctx, amount = None):
@@ -245,41 +294,6 @@ class Economy(commands.Cog):
             json.dump(users, f)
         return True
 
-    # load data 
-    async def get_bank_data(self):
-        with open("bank.json", "r") as f:
-            users = json.load(f)
-        return users
-
-    async def update_bank(self, user,change = 0, mode = "wallet"):
-        users = await self.get_bank_data()
-        users[str(user.id)][mode] += change
-
-        with open("bank.json", "w") as f:
-            json.dump(users, f)
-        bal = [users[str(user.id)]["wallet"], users[str(user.id)]["bank"]]
-        return bal
-
-    @commands.command()
-    async def beg(self, ctx):
-        await self.open_account(ctx.author)
-        self.user = ctx.author
-        users = await self.get_bank_data()
-        wallet_amt = users[str(self.user.id)]["wallet"]
-        bank_amt = users[str(self.user.id)]["bank"]
-        earnings = random.randrange(100)
-
-        if wallet_amt + bank_amt < 200:
-            await ctx.send(f"Someone gave you **{earnings}** coins!")
-            users[str(self.user.id)]["wallet"] += earnings
-        else:
-            await ctx.send("You can only beg if your net worth is below __**200 coins**__")
-
-        with open("bank.json", "w") as f:
-            json.dump(users, f)
-
-        return self.user
-
     @commands.command(aliases = ["steal", "mug"])
     async def rob(self, ctx, member: discord.Member):
         await self.open_account(ctx.author)
@@ -308,22 +322,7 @@ class Economy(commands.Cog):
     @rob.error
     async def rob_error(self, ctx, err):
         if isinstance(err, errors.MemberNotFound):
-            await ctx.send("invalid syntax. type `.rob @user`")
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        ctx = message.channel
-        # men = message.author.mention
-
-        if message.author.id == 302050872383242240 and message.embeds:          
-            if '<@' in message.embeds[0].description and "done" in message.embeds[0].description:
-                desc = message.embeds[0].description
-                start = desc.find('<@')
-                end = desc.find('>')
-                bumper_id = desc[start+2:end]
-                bumper = self.client.get_user(int(bumper_id))
-                await self.update_bank(bumper, 500, "wallet")
-                await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
+            await ctx.send("invalid syntax. type `.rob @user`")  
             
 def setup(client):
     client.add_cog(Economy(client))
