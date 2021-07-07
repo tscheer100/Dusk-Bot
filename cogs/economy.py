@@ -11,6 +11,20 @@ class Economy(commands.Cog):
         self.client = client
 
     # load data 
+    async def open_account(self, user):
+        users = await self.get_bank_data()
+
+        if str(user.id) in users:
+            return False
+        else:
+            users[str(user.id)] = {}
+            users[str(user.id)]["wallet"] = 0
+            users[str(user.id)]["bank"] = 0
+
+        with open("bank.json", "w") as f:
+            json.dump(users, f)
+        return True
+
     async def get_bank_data(self):
         with open("bank.json", "r") as f:
             users = json.load(f)
@@ -280,19 +294,7 @@ class Economy(commands.Cog):
             results_embed.add_field(name= done, value = f" Oh no! You've lost {amount} coins.")
         await msg.edit(embed = results_embed)
 
-    async def open_account(self, user):
-        users = await self.get_bank_data()
 
-        if str(user.id) in users:
-            return False
-        else:
-            users[str(user.id)] = {}
-            users[str(user.id)]["wallet"] = 0
-            users[str(user.id)]["bank"] = 0
-
-        with open("bank.json", "w") as f:
-            json.dump(users, f)
-        return True
 
     @commands.command(aliases = ["steal", "mug"])
     async def rob(self, ctx, member: discord.Member):
