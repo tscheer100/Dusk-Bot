@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 import discord
 from discord.ext import commands
-from discord.ext.commands import errors
+# from discord.ext.commands import errors
 
 # uncomment if running in VSCode and change to the appropriate directory.
 # os.chdir('./Dusk')

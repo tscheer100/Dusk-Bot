@@ -40,6 +40,7 @@ class Economy(commands.Cog):
         return bal
 
     @commands.command()
+    @commands.cooldown(1,60, commands.BucketType.user)
     async def beg(self, ctx):
         await self.open_account(ctx.author)
         self.user = ctx.author
@@ -58,6 +59,11 @@ class Economy(commands.Cog):
             json.dump(users, f)
 
         return self.user
+    @beg.error 
+    async def beg_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+            await ctx.send(msg)
 
     # Events
     @commands.Cog.listener()
