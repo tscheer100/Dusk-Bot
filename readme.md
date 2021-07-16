@@ -50,3 +50,5 @@ python3 dusk.py
 - Learned about embed editing.
 - Got more experience integrating JSON into Python.
 - Gained more understanding as to when to use the `self` command to call other methods within a class.
+- learned about MongoDB and how it is not good with discord.py and rather to use Motor to stop with blocking
+- learned the basics of database manipulation
