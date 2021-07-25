@@ -5,6 +5,8 @@ A general purpose custom Discord bot that adds useful features as well as fun li
 - [discord.py](https://github.com/Rapptz/discord.py)
 - A bot token. must authorize [here](https://discord.com/developers/applications)
 - [.env](https://pypi.org/project/python-dotenv/)
+- [Motor](https://github.com/mongodb/motor)
+- pymongo
 - Python 3.x
 
 ## Setup
