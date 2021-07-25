@@ -2,7 +2,7 @@ from logging import error
 import os
 import random
 import asyncio
-from discord import member
+from discord import member, user
 from discord.ext.commands.core import command
 from dotenv import load_dotenv
 import discord
@@ -48,6 +48,37 @@ class Bank(commands.Cog):
             print(new)
         else:
             print("member already has a bank")
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        ctx = message.channel
+
+        if message.author.id == 302050872383242240 and message.embeds:
+            if '<@' in message.embeds[0].description and "private" in message.embeds[0].description:
+                desc = message.embeds[0].description
+                start = desc.find('<@')
+                end = desc.find('>')
+                bumper_id = desc[start+2:end]
+                bumper_id = int(bumper_id)
+                bumper = self.client.get_user(int(bumper_id))
+                self.user = await collection.find_one({'_id': bumper_id})
+                self.user_wallet = self.user['wallet']
+                await collection.update_one({'_id': bumper_id}, {'$set': {'wallet': self.user_wallet + 500} })
+                await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
+
+
+#     async def on_message(self, message):
+#         ctx = message.channel
+
+#         if message.author.id == 302050872383242240 and message.embeds:          
+#             if '<@' in message.embeds[0].description and "done" in message.embeds[0].description:
+#                 desc = message.embeds[0].description
+#                 start = desc.find('<@')
+#                 end = desc.find('>')
+#                 bumper_id = desc[start+2:end]
+#                 bumper = self.client.get_user(int(bumper_id))
+#                 await self.update_bank(bumper, 500, "wallet")
+#                 await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
 
     # Commands
     @commands.command(aliases = ["bal", "wallet", "money"])
@@ -210,19 +241,19 @@ class Bank(commands.Cog):
 
         # dusk emojis
 
-        # among_rand = "<a:among_rand:855159685538512937>"
-        # choices = ["<:among_yellow:855213922180005969>",
-        # "<:among_white:855213922062958593>",
-        # "<:among_red:855160363090706464>",
+        among_rand = "<a:among_rand:855159685538512937>"
+        choices = ["<:among_yellow:855213922180005969>",
+        "<:among_white:855213922062958593>",
+        "<:among_red:855160363090706464>",
         # "<:among_purple:855160523939381278>",
         # "<:among_cyan:855213921899773984>",
         # "<:among_blue:855160063495897130>"]
  
         # test server emojis
-        among_rand = "<a:among_rand:848648377922224229>"
-        choices = ["<:among_blue:848646255252471868>",
-        "<:among_purple:848646255264399370>",
-        "<:among_red:848646255248146523>",
+        # among_rand = "<a:among_rand:848648377922224229>"
+        # choices = ["<:among_blue:848646255252471868>",
+        # "<:among_purple:848646255264399370>",
+        # "<:among_red:848646255248146523>",
         # "<:among_yellow:855192733555621938>",
         # "<:among_cyan:855194895333720115>", removed to make chances more fair
         # "<:among_white:855196037647171595>"
