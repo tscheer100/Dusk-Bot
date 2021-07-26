@@ -54,7 +54,7 @@ class Bank(commands.Cog):
         ctx = message.channel
 
         if message.author.id == 302050872383242240 and message.embeds:
-            if '<@' in message.embeds[0].description and "private" in message.embeds[0].description:
+            if '<@' in message.embeds[0].description and "done" in message.embeds[0].description:
                 desc = message.embeds[0].description
                 start = desc.find('<@')
                 end = desc.find('>')
@@ -65,20 +65,6 @@ class Bank(commands.Cog):
                 self.user_wallet = self.user['wallet']
                 await collection.update_one({'_id': bumper_id}, {'$set': {'wallet': self.user_wallet + 500} })
                 await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
-
-
-#     async def on_message(self, message):
-#         ctx = message.channel
-
-#         if message.author.id == 302050872383242240 and message.embeds:          
-#             if '<@' in message.embeds[0].description and "done" in message.embeds[0].description:
-#                 desc = message.embeds[0].description
-#                 start = desc.find('<@')
-#                 end = desc.find('>')
-#                 bumper_id = desc[start+2:end]
-#                 bumper = self.client.get_user(int(bumper_id))
-#                 await self.update_bank(bumper, 500, "wallet")
-#                 await ctx.send(f"Thanks, {bumper.mention} for bumping the server! \nYou've earned `500` coins!")
 
     # Commands
     @commands.command(aliases = ["bal", "wallet", "money"])
