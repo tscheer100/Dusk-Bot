@@ -341,6 +341,35 @@ class Bank(commands.Cog):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
+        elif isinstance(err, errors.MissingRequiredArgument):
+            await ctx.send("Who are you trying to rob? Try `.rob @user`")
+            self.rob.reset_cooldown(ctx)
+        else:
+            raise
+    
+    @commands.command(aliases = ['nick', 'name'])
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    async def forcenick(self, ctx, member: discord.Member, nick = None):
+        if nick == None:
+            await ctx.send("You didn't set a nickname. Try `.forcenick @user <nickname>`")
+
+        await self.open_bank(ctx.author)
+        price = 5000
+        forcer = await collection.find_one({'_id': ctx.author.id})
+        forcer_wallet = forcer['wallet']
+        if forcer_wallet < price:
+            await ctx.send(f"You don't have enough money to force a nickname! The price is {price}.")
+        else:
+            await collection.update_one({'_id': ctx.author.id}, {'$set': {'wallet': forcer_wallet - price} })
+            await member.edit(nick=nick)
+            await ctx.send(f"nickname was changed for {member.mention}")
+    @forcenick.error
+    async def forcenick_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after) 
+            await ctx.send(msg)
+        else:
+            raise
 
 def setup(client):
     client.add_cog(Bank(client))
