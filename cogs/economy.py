@@ -2,10 +2,10 @@ from logging import error
 import os
 import random
 import asyncio
+import discord
+from dotenv import load_dotenv
 from discord import member, user
 from discord.ext.commands.core import command
-from dotenv import load_dotenv
-import discord
 from discord.ext import commands
 from discord.ext.commands import context, errors
 from motor import motor_asyncio
@@ -309,6 +309,7 @@ class Bank(commands.Cog):
     async def rob(self, ctx, member: discord.Member):
         await self.open_bank(ctx.author)
         await self.open_bank(member)
+        await asyncio.sleep(0.5)
         VICTIM_ID = await collection.find_one({'_id': member.id})
         VICTIM_ID = VICTIM_ID['_id']
         THEIF_ID = await collection.find_one({'_id': ctx.author.id})
