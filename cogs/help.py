@@ -71,6 +71,7 @@ class Help(commands.Cog):
         embed.add_field(name = '.gift @user <amount>', value = "Give coins to another member", inline = False)
         embed.add_field(name = '.slots <amount>', value = "Try your luck with slots.", inline = False)
         embed.add_field(name = '.rob', value = "rob another player. \n(must have at least 1/4 of their wallet in your wallet)", inline = False)
+        embed.add_field(name = 'Free 500 coins', value = "**Earn a free __`500 coins`__ every time you bump the server in <#767525366256369696>!**")
         embed.set_footer(icon_url = ctx.author.avatar_url, text = f"reqquested by {ctx.author.name}")
         return embed
 
