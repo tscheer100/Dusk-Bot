@@ -42,7 +42,7 @@ class Valheim(commands.Cog):
         )
 
         embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/767175117901266974/767250128045473802/duskiconmixedreborn.gif")
-        embed.add_field(name = "Latest patch (v. 1.3 sv2)", value = "file can be found [here](https://niflheim.blob.core.windows.net/installer/NiflheimLauncher.zip)", inline = False)
+        embed.add_field(name = "Latest patch", value = "file can be found [here](https://niflheim.blob.core.windows.net/installer/NiflheimLauncher.zip)", inline = False)
         embed.add_field(name = "Installation instructions", value = "installation and join instructions can be found [here](https://github.com/Firoso/Valheim-Dusk-Niflheim)", inline = False)
         
         await ctx.author.send(embed = embed)

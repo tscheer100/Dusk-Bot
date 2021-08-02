@@ -167,7 +167,7 @@ class Bank(commands.Cog):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
 
-    @commands.command(aliases = ["send","give"])
+    @commands.command(aliases = ['send','give', 'pay'])
     async def gift(self, ctx, Member: discord.Member, amount = None):
         await self.open_bank(ctx.author)
         await self.open_bank(member)
