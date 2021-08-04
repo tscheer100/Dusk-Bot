@@ -30,23 +30,6 @@ class General(commands.Cog):
         print("General Cog loaded.")
 
     # Commands
-    # @commands.command()
-    # async def help(self, ctx):
-    #     embed = discord.Embed(
-    #         title = "Help menu",
-    #         color = discord.Colour.purple()
-    #     )
-    #     embed.set_thumbnail(url = "https://cdn.discordapp.com/attachments/767175117901266974/767250128045473802/duskiconmixedreborn.gif")
-    #     embed.add_field(name = '.help', value = "Type `.help` to bring up this menu, but you already knew that.", inline = False)
-    #     embed.add_field(name = '.eight', value = "Type `.eight <question>` to summon the all powerful 8-ball!", inline = False)
-    #     embed.add_field(name = '.coin', value = "Flip a coin", inline = False)
-    #     embed.add_field(name = '.dice', value = "Roll a virtually infinite sided dice. `.dice <number of sides>`")
-    #     embed.add_field(name = '.whois', value = "Learn the details of a member with `.whois @user`", inline = False)
-    #     embed.add_field(name = '.valheim', value = "Get info of the Valheim server.", inline = False)
-    #     embed.add_field(name = '.modvalheim', value = "Get info of the modded valheim server.", inline = False)
-    #     embed.add_field(name = '.github', value = "Check out the bot's code and more.", inline = False)
-    #     embed.add_field(name = 'Support the Dev for more free bots :grin:', value = "https://www.paypal.com/paypalme/TheTurtleKing", inline = False)
-    #     await ctx.send(embed = embed)
 
     @commands.command(aliases = ['git', 'code'])
     async def github(self, ctx):
@@ -116,7 +99,14 @@ class General(commands.Cog):
         await ctx.send(embed = embed)
 
     @commands.command(aliases = ['dice', 'd'])
-    async def roll(self, ctx, *,  sides):
+    async def roll(self, ctx, sides = None):
+        if sides == None:
+            await ctx.send("number of sides not specified, default will be 6.")
+            sides = 6
+        if sides <= 1:
+            await ctx.send("numbwe of sides needs to at least be 2 and no less.")
+            return
+
         num = random.randint(1, int(sides))
         embed = discord.Embed(
             title = f"Rolling a {sides} sided die",
@@ -139,6 +129,8 @@ class General(commands.Cog):
                 color = discord.Colour.dark_purple()
             )
             await ctx.send(embed = embed)
+        else:
+            raise
 
 def setup(client):
     client.add_cog(General(client))
