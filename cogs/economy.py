@@ -90,6 +90,7 @@ class Bank(commands.Cog):
         )
         embed.add_field(name = "Wallet balance", value = wallet_amt)
         embed.add_field(name = "Bank balance", value = bank_amt)
+        embed.add_field(name = "Net Worth", value = wallet_amt + bank_amt, inline = False)
         embed.set_footer(icon_url = req.avatar_url, text = f"requested by {req.display_name}")
         await ctx.send(embed = embed)
     @balance.error
