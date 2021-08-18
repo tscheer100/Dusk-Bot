@@ -54,3 +54,5 @@ python3 dusk.py
 - Gained more understanding as to when to use the `self` command to call other methods within a class.
 - learned about MongoDB and how it is not good with discord.py and rather to use Motor to stop with blocking
 - learned the basics of database manipulation
+- learned how to call a method from one cog to another
+- learned about the `reversed` command
