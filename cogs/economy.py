@@ -145,28 +145,28 @@ class Bank(commands.Cog):
         else:
             await ctx.send("You don't have enough in your bank to withdraw that much!")
 
-    @commands.command()
-    @commands.cooldown(1,60, commands.BucketType.user)
-    async def beg(self, ctx):
-        await self.open_bank(ctx)
-        self.user = ctx.author
-        self.ID = ctx.author.id
+    # @commands.command()
+    # @commands.cooldown(1,60, commands.BucketType.user)
+    # async def beg(self, ctx):
+    #     await self.open_bank(ctx)
+    #     self.user = ctx.author
+    #     self.ID = ctx.author.id
         
-        result = await collection.find_one({'_id': self.ID})
-        wallet_amt = result['wallet']
-        bank_amt = result['bank']
-        earnings = random.randrange(100)
-        if wallet_amt + bank_amt < 200:
-            await ctx.send(f"Someone gave you **{earnings}** coins!")
-            new_wallet = wallet_amt + earnings
-            await collection.update_one({'_id': self.ID}, {'$set': {'wallet': new_wallet} })
-        else:
-            await ctx.send("You can only beg if your net worth is below __**200 coins**__")
-    @beg.error 
-    async def beg_error(self, ctx, err):
-        if isinstance(err, commands.CommandOnCooldown):
-            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
-            await ctx.send(msg)
+    #     result = await collection.find_one({'_id': self.ID})
+    #     wallet_amt = result['wallet']
+    #     bank_amt = result['bank']
+    #     earnings = random.randrange(100)
+    #     if wallet_amt + bank_amt < 200:
+    #         await ctx.send(f"Someone gave you **{earnings}** coins!")
+    #         new_wallet = wallet_amt + earnings
+    #         await collection.update_one({'_id': self.ID}, {'$set': {'wallet': new_wallet} })
+    #     else:
+    #         await ctx.send("You can only beg if your net worth is below __**200 coins**__")
+    # @beg.error 
+    # async def beg_error(self, ctx, err):
+    #     if isinstance(err, commands.CommandOnCooldown):
+    #         msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+    #         await ctx.send(msg)
 
     @commands.command(aliases = ['send','give', 'pay'])
     async def gift(self, ctx, Member: discord.Member, amount = None):
