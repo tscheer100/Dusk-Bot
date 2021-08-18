@@ -43,5 +43,27 @@ class Work(commands.Cog):
         else:
             raise
             
+    @commands.command()
+    @commands.cooldown(1,120, commands.BucketType.user)
+    async def work(self, ctx):
+        await self.open_bank(ctx)
+
+        earned = random.randrange(200)
+        # user = ctx.author
+        ID = ctx.author.id
+        result = await collection.find_one({'_id': ID})
+        wallet_amt = result['wallet']
+
+        await ctx.send(f"you worked for {earned} coins")
+        new_wallet = wallet_amt + earned
+        await collection.update_one({'_id': ID}, {'$set': {'wallet': new_wallet} })
+    @work.error
+    async def work_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+            await ctx.send(msg)
+        else:
+            raise
+
 def setup(client):
     client.add_cog(Work(client))
