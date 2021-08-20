@@ -44,7 +44,8 @@ class Work(commands.Cog):
         else:
             raise
 
-    # 2 min 
+    # 2 min
+    @commands.has_role("work") 
     @commands.command()
     @commands.cooldown(1,120, commands.BucketType.user)
     async def work(self, ctx):
@@ -62,6 +63,8 @@ class Work(commands.Cog):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
+        elif isinstance(err, commands.errors.MissingRole):
+            await ctx.send("You don't have the work command. Buy it by using `.shop`")
         else:
             raise
     

@@ -30,7 +30,7 @@ class Bank(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         await self.open_bank(member)
-
+        
     async def open_bank(self, ctx: Union[commands.Context, discord.Member]):
         if isinstance(ctx, commands.Context):
             self.ID = ctx.author.id
@@ -43,10 +43,15 @@ class Bank(commands.Cog):
             print(result)
             wallet = 0
             bank = 0
-            new = {'_id': self.ID, 'name': self.name, 'wallet': wallet, 'bank': bank}
+            new = {'_id': self.ID, 'name': self.name, 'wallet': wallet, 'bank': bank,
+           'has_work': False,}
             await collection.insert_one(new)
             print(new)
         else:
+            print(result['has_work'])
+            if result['has_work'] == None:
+                await collection.update_one({'_id':self.ID}, {'$set': {'has_work': False}})
+                print("made a has_work variable for user")
             print("member already has a bank")
 
     @commands.Cog.listener()
