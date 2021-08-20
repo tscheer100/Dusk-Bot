@@ -48,10 +48,6 @@ class Bank(commands.Cog):
             await collection.insert_one(new)
             print(new)
         else:
-            print(result['has_work'])
-            if result['has_work'] == None:
-                await collection.update_one({'_id':self.ID}, {'$set': {'has_work': False}})
-                print("made a has_work variable for user")
             print("member already has a bank")
 
     @commands.Cog.listener()
