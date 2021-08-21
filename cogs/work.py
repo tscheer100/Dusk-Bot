@@ -18,6 +18,14 @@ class Work(commands.Cog):
         self.Bank = client.get_cog('Bank')
         self.open_bank = self.Bank.open_bank
 
+    # Events
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Work  ready")
+
+    #commands 
+    
+    # 1 min
     @commands.command()
     @commands.cooldown(1,60, commands.BucketType.user)
     async def beg(self, ctx):
@@ -42,23 +50,107 @@ class Work(commands.Cog):
             await ctx.send(msg)
         else:
             raise
-            
+
+    # 2 min
+    @commands.has_role("work") 
     @commands.command()
     @commands.cooldown(1,120, commands.BucketType.user)
     async def work(self, ctx):
         await self.open_bank(ctx)
-
-        earned = random.randrange(200)
-        # user = ctx.author
+        earned = random.randrange(20)
         ID = ctx.author.id
         result = await collection.find_one({'_id': ID})
         wallet_amt = result['wallet']
 
-        await ctx.send(f"you worked for {earned} coins")
+        await ctx.send(f"You worked for **{earned}** coins")
         new_wallet = wallet_amt + earned
         await collection.update_one({'_id': ID}, {'$set': {'wallet': new_wallet} })
     @work.error
     async def work_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+            await ctx.send(msg)
+        elif isinstance(err, commands.errors.MissingRole):
+            await ctx.send("You don't have the work command. Buy it by using `.shop`")
+        else:
+            raise
+    
+    # 5 min
+    @commands.command()
+    @commands.cooldown(1, 300, commands.BucketType.user)
+    async def pray(self, ctx):
+        await self.open_bank(ctx)
+        earned = random.randrange(40)
+        ID = ctx.author.id
+        result = await collection.find_one({'_id': ID})
+        wallet_amt = result['wallet']
+
+        await ctx.send(f"You prayed  to the Flying Spaghetti Monster. \nHis noodly appendages hand you **{earned}** coins! R'amen!")
+        new_wallet = wallet_amt + earned
+        await collection.update_one({'_id': ID}, {'$set': {'wallet': new_wallet} })
+    @pray.error
+    async def pray_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+            await ctx.send(msg)
+        else:
+            raise
+
+    @commands.command()
+    @commands.cooldown(1, 300, commands.BucketType.user)
+    async def salvage(self, ctx):
+        await self.open_bank(ctx)
+        earned = random.randrange(40)
+        ID = ctx.author.id
+        result = await collection.find_one({'_id': ID})
+        wallet_amt = result['wallet']
+
+        await ctx.send(f"You have salvaged **{earned}** coins digging through dumpsters")
+        new_wallet = wallet_amt + earned
+        await collection.update_one({'_id': ID}, {'$set': {'wallet': new_wallet} })
+    @salvage.error
+    async def salvage_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+            await ctx.send(msg)
+        else:
+            raise
+
+    @commands.command()
+    @commands.cooldown(1, 300, commands.BucketType.user)
+    async def dance(self, ctx):
+        await self.open_bank(ctx)
+        earned = random.randrange(40)
+        ID = ctx.author.id
+        result = await collection.find_one({'_id': ID})
+        wallet_amt = result['wallet']
+
+        await ctx.send(f"You danced on the street as bystanders tip you **{earned}** coins")
+        new_wallet = wallet_amt + earned
+        await collection.update_one({'_id': ID}, {'$set': {'wallet': new_wallet} })
+    @dance.error
+    async def dance_error(self, ctx, err):
+        if isinstance(err, commands.CommandOnCooldown):
+            msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
+            await ctx.send(msg)
+        else:
+            raise
+
+
+    @commands.command()
+    @commands.cooldown(1, 300, commands.BucketType.user)
+    async def workout(self, ctx):
+        await self.open_bank(ctx)
+        earned = random.randrange(40)
+        ID = ctx.author.id
+        result = await collection.find_one({'_id': ID})
+        wallet_amt = result['wallet']
+
+        await ctx.send(f"You workout and a pansexual cowboy appreciates your abs and gives you **{earned}** coins")
+        new_wallet = wallet_amt + earned
+        await collection.update_one({'_id': ID}, {'$set': {'wallet': new_wallet} })
+    @workout.error
+    async def workout_error(self, ctx, err):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
