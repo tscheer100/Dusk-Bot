@@ -23,8 +23,11 @@ client = commands.Bot(
     owner_id = int(OWNER_ID)
     )
 
+client.load_extension('cogs.economy') # This has to be loaded in first because other cogs rely on this one.
+
 for filename in reversed(os.listdir('./cogs')):
-    if filename.endswith('.py'):
+   
+    if filename.endswith('.py') and not filename == 'economy.py':
         client.load_extension(f'cogs.{filename[:-3]}')
 
 @client.event

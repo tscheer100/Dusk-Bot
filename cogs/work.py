@@ -18,6 +18,13 @@ class Work(commands.Cog):
         self.Bank = client.get_cog('Bank')
         self.open_bank = self.Bank.open_bank
 
+    # Events
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Work  ready")
+
+    #commands 
+    
     # 1 min
     @commands.command()
     @commands.cooldown(1,60, commands.BucketType.user)
