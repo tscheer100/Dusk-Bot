@@ -71,11 +71,12 @@ class Work(commands.Cog):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
         elif isinstance(err, commands.errors.MissingRole):
-            await ctx.send("You don't have the work command. Buy it by using `.shop`")
+            await ctx.send("You don't have the work role. Buy it by using `.shop`")
         else:
             raise
     
     # 5 min
+    @commands.has_role("pray") 
     @commands.command()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def pray(self, ctx):
@@ -93,9 +94,12 @@ class Work(commands.Cog):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
+        elif isinstance(err, commands.errors.MissingRole):
+            await ctx.send("You don't have the pray role. Buy it by using `.shop`")
         else:
             raise
-
+        
+    @commands.has_role("salvage") 
     @commands.command()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def salvage(self, ctx):
@@ -113,9 +117,12 @@ class Work(commands.Cog):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
+        elif isinstance(err, commands.errors.MissingRole):
+            await ctx.send("You don't have the pray role. Buy it by using `.shop`")
         else:
             raise
 
+    @commands.has_role("dance")
     @commands.command()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def dance(self, ctx):
@@ -133,10 +140,12 @@ class Work(commands.Cog):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
+        elif isinstance(err, commands.errors.MissingRole):
+            await ctx.send("You don't have the dance role. Buy it by using `.shop`")
         else:
             raise
 
-
+    @commands.has_role("workout")
     @commands.command()
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def workout(self, ctx):
@@ -154,6 +163,8 @@ class Work(commands.Cog):
         if isinstance(err, commands.CommandOnCooldown):
             msg = "**You are on a cooldown!** please wait **{:.2f}s**".format(err.retry_after)   
             await ctx.send(msg)
+        elif isinstance(err, commands.errors.MissingRole):
+            await ctx.send("You don't have the workout role. Buy it by using `.shop`")
         else:
             raise
 
