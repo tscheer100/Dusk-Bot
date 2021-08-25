@@ -363,5 +363,15 @@ class Bank(commands.Cog):
         else:
             raise
 
+    @commands.command()
+    async def addnet(self, ctx):
+        for member  in ctx.guild.members:
+            await self.open_bank(member)
+            await asyncio.sleep(.1)
+            mem = await collection.find_one({'_id': member.id})
+            net = mem['wallet'] + mem['bank']
+            await collection.update_one({'_id': member.id}, {'$set': {'net': net} }, upsert = True)
+            print(str(mem['_id']) + " " + str(mem['net']) )
+
 def setup(client):
     client.add_cog(Bank(client))
