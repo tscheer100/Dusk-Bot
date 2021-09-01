@@ -165,6 +165,10 @@ class Bank(commands.Cog):
         ID = ctx.author.id
         MEM_ID = Member.id
         
+        if ctx.author.id == Member.id:
+            await ctx.send("You can't gift yourself something.")
+            return
+
         user = await collection.find_one({'_id': ID})
         mem = await collection.find_one({'_id': MEM_ID})
         wallet_amt = user['wallet']
