@@ -39,7 +39,7 @@ async def status(ctx):
     print("I am alive!")
     await ctx.send("I am alive!")
 
-@client.command()
+@client.command() 
 @commands.is_owner()
 async def shutdown(ctx):
     await ctx.send("Bot shutting down")

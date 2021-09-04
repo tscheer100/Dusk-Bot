@@ -3,6 +3,7 @@ import os
 import random
 import asyncio
 import discord
+import pymongo
 from dotenv import load_dotenv
 from discord import member, user
 from discord.ext.commands.core import command
@@ -226,9 +227,9 @@ class Bank(commands.Cog):
         choices = ["<:among_yellow:855213922180005969>",
         "<:among_white:855213922062958593>",
         "<:among_red:855160363090706464>",
-        # "<:among_purple:855160523939381278>",
-        # "<:among_cyan:855213921899773984>",
-        # "<:among_blue:855160063495897130>"]
+        "<:among_purple:855160523939381278>",
+        "<:among_cyan:855213921899773984>",
+        "<:among_blue:855160063495897130>"]
  
         # test server emojis
         # among_rand = "<a:among_rand:848648377922224229>"
@@ -236,9 +237,9 @@ class Bank(commands.Cog):
         # "<:among_purple:848646255264399370>",
         # "<:among_red:848646255248146523>",
         # "<:among_yellow:855192733555621938>",
-        # "<:among_cyan:855194895333720115>", removed to make chances more fair
-        # "<:among_white:855196037647171595>"
-        ]
+        # "<:among_cyan:855194895333720115>", 
+        # "<:among_white:855196037647171595>"]
+        
         
         first = ""
         done = ""
@@ -367,15 +368,35 @@ class Bank(commands.Cog):
         else:
             raise
 
-    @commands.command()
-    async def addnet(self, ctx):
-        for member  in ctx.guild.members:
-            await self.open_bank(member)
-            await asyncio.sleep(.1)
-            mem = await collection.find_one({'_id': member.id})
-            net = mem['wallet'] + mem['bank']
-            await collection.update_one({'_id': member.id}, {'$set': {'net': net} }, upsert = True)
-            print(str(mem['_id']) + " " + str(mem['net']) )
+
+    # @commands.command()
+    # async def addnet(self, ctx):
+    #     cursor = collection.find().sort('_id')
+    #     docs = await cursor.to_list(None)
+    #     for d in docs:
+    #         if d['_id'] in ctx.guild.members.id:
+    #             print("is in server")
+    #         else:
+    #             print("not in server")
+        
+
+        # for member  in ctx.guild.members:
+        #     await self.open_bank(member)
+        #     await asyncio.sleep(.1)
+        #     mem = await collection.find_one({'_id': member.id})
+        #     net = mem['wallet'] + mem['bank']
+        #     await collection.update_one({'_id': member.id}, {'$set': {'net': net} }, upsert = True)
+        #     print(str(mem['_id']) + " " + str(mem['net']) )
+    
+    # @commands.command()
+    # async def baltop(self, ctx):
+    #     self.addnet()
+    #     cursor = collection.find().sort('net', pymongo.DESCENDING)
+    #     docs = await cursor.to_list(length = 10)
+    #     for doc in docs:
+    #         print(doc['name'] + " " + str(doc['net']))
+
+    #     print(docs)
 
 def setup(client):
     client.add_cog(Bank(client))
