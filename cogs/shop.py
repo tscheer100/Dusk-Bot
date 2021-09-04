@@ -47,7 +47,7 @@ class Shop(commands.Cog):
         if not role:
             embed_shop = discord.Embed(
                 title = f"Dusk Shop",
-                description = "Use `.shop <itme>` to purchase. \n **Example:** `.shop work`",
+                description = "Use `.shop <item>` to purchase. \n **Example:** `.shop work`",
                 color = discord.Color.purple()
             )
             
