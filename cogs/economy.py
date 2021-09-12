@@ -368,35 +368,83 @@ class Bank(commands.Cog):
         else:
             raise
 
+    @commands.command()
+    async def addnet(self, ctx):
+        cursor = collection.find().sort('_id')
+        docs = await cursor.to_list(None)
+        ids = []
+        for _ids in ctx.guild.members:
+            ids.append(_ids.id)
 
-    # @commands.command()
-    # async def addnet(self, ctx):
-    #     cursor = collection.find().sort('_id')
-    #     docs = await cursor.to_list(None)
-    #     for d in docs:
-    #         if d['_id'] in ctx.guild.members.id:
-    #             print("is in server")
-    #         else:
-    #             print("not in server")
-        
+        for doc in docs:
+            if doc['_id'] in  ids:
+                mem = await collection.find_one({'_id': doc['_id']})
+                print(mem)
+                await asyncio.sleep(.1)
+                mem = await collection.find_one({'_id': doc['_id']})
+                net = int(mem['wallet']) + int(mem['bank'])
+                await collection.update_one({'_id': doc['_id']}, {'$set': {'net': net} }, upsert = True)
+                print(str(mem))
+            else:
+                mem = await collection.find_one({'_id': doc['_id']})
+                net = int(mem['bank']) + int(mem['wallet'])
+                await collection.update_one({'_id': mem['_id']}, {'$set': {'net': net} })
+                print(str(mem) + " not in the server" )
 
-        # for member  in ctx.guild.members:
-        #     await self.open_bank(member)
-        #     await asyncio.sleep(.1)
-        #     mem = await collection.find_one({'_id': member.id})
-        #     net = mem['wallet'] + mem['bank']
-        #     await collection.update_one({'_id': member.id}, {'$set': {'net': net} }, upsert = True)
-        #     print(str(mem['_id']) + " " + str(mem['net']) )
     
-    # @commands.command()
-    # async def baltop(self, ctx):
-    #     self.addnet()
-    #     cursor = collection.find().sort('net', pymongo.DESCENDING)
-    #     docs = await cursor.to_list(length = 10)
-    #     for doc in docs:
-    #         print(doc['name'] + " " + str(doc['net']))
+    @commands.command()
+    async def baltop(self, ctx):
+        cursor = collection.find().sort('net', pymongo.DESCENDING)
+        docs = await cursor.to_list(length = 100)
+        ids = []
+        checks = []
 
-    #     print(docs)
+        for _ids in ctx.guild.members:
+            ids.append(_ids.id)
+        print(ids)
+
+        for check in docs:
+            if check['_id'] in ids:
+                checks.append(check['_id'])
+
+        print(checks)
+
+        embed = discord.Embed(
+            title = "Members with the highest networth",
+            color = discord.Color.purple()
+        )
+
+        if len(checks) < 10:
+            for doc in range(len(checks)):
+                mem = ctx.guild.get_member(checks[doc])
+                net = await collection.find_one({'_id': mem.id})
+
+                print(mem.id)
+                try:
+                    if not mem.id == 845372731872903198:
+                        embed.add_field(name = mem, value=net['net'], inline = False)
+                except KeyError:
+                    print(f"KeyError with {mem} with id {mem.id}")
+
+        else:
+            for doc in range(10):
+                mem = ctx.guild.get_member(checks[doc])
+                net = await collection.find_one({'_id': mem.id})
+
+                print(mem.id)
+                try:
+                    if not mem.id == 845372731872903198:
+                        embed.add_field(name = mem, value=net['net'], inline = False)
+                except KeyError:
+                    print(f"KeyError with {mem} with id {mem.id}")
+
+        await ctx.send(embed = embed)
+    @baltop.error
+    async def baltop_error(self, ctx, err):
+        if isinstance(err, KeyError):
+            print("KeyError")
+        else:
+            raise
 
 def setup(client):
     client.add_cog(Bank(client))
