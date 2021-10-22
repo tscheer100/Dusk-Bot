@@ -259,6 +259,7 @@ class Bank(commands.Cog):
             color = discord.Color.dark_purple()
         )
         initial = among_rand + " " + among_rand + " " + among_rand
+        initial_embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.display_name}")
         initial_embed.add_field(name = initial, value = "you wait anxiously...")
         msg = await ctx.send(embed = initial_embed)
         await asyncio.sleep(1)
@@ -269,6 +270,7 @@ class Bank(commands.Cog):
         )
         first += final[0] + " " + among_rand + " " + among_rand
         first_embed.add_field(name = first, value = "you wait anxiously...")
+        first_embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.display_name}")
         await msg.edit(embed = first_embed)
 
         await asyncio.sleep(1)
@@ -279,6 +281,7 @@ class Bank(commands.Cog):
         )
         second = final[0] + " " + final[1] + " " + among_rand
         second_embed.add_field(name = second, value = "you wait anxiously...")
+        second_embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.display_name}")
         await msg.edit(embed = second_embed)
 
         await asyncio.sleep(1)
@@ -286,15 +289,16 @@ class Bank(commands.Cog):
             title = "The slots finally stop spinning...",
             color = discord.Color.dark_purple()
         )
+        results_embed.set_footer(icon_url = ctx.author.avatar_url, text = f"requested by {ctx.author.display_name}")
         print(duplicate_check)
         len_diff = len(final) - len(duplicate_check)
         # results, send after slot finishes
         if len_diff == 2:
             await collection.update_one({'_id': ctx.author.id}, {'$set': {'wallet': wallet + (4*amount)} })
-            results_embed.add_field(name = done, value = f"OH BABY A TRIPLE! You've won {4*amount} coins! :Fire16:")
+            results_embed.add_field(name = done, value = f"OH BABY A TRIPLE! You've won {4*amount} coins! ")
         elif len_diff == 1:
             await collection.update_one({'_id': ctx.author.id}, {'$set': {'wallet': wallet + amount} })
-            results_embed.add_field(name = done, value = f"Congratulations! You've won {2*amount} coins! :Fire16:")
+            results_embed.add_field(name = done, value = f"Congratulations! You've won {2*amount} coins! ")
         else:
             await collection.update_one({'_id': ctx.author.id}, {'$set': {'wallet': wallet - amount} })
             results_embed.add_field(name= done, value = f" Oh no! You've lost {amount} coins.")

@@ -132,5 +132,7 @@ class General(commands.Cog):
         else:
             raise
 
+    
+
 def setup(client):
     client.add_cog(General(client))
