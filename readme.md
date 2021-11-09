@@ -26,16 +26,6 @@ once in the file, add your discord token with the following syntax
 ```
 DISCORD_TOKEN="U2OTA3MTQ3ODk5Njkjkz.X2Yqtg.FSGfvEqZILo"
 ```
-also, to make the economy work correctly, make a `bank.json` file.
-```sh
-touch bank.json
-```
-then `nano` into the file to edit it like before and add an empty curly brace backet.
-```json
-{
-
-}
-```
 run the bot using python
 ```sh
 python3 dusk.py
