@@ -42,7 +42,7 @@ python3 dusk.py
 ```
 
 
-### What I've learned fomr this prroject:
+### What I've learned from this project:
 - Tenerary Operators and how to use them to circumnavigate Discord embed's lack of support for regular `if-else` statements.
 - Familiarized myself with `.gitignore` as not to leak data to the public.
 - learned about `.env` and how it can be used to seperate data from the rest of the code.
